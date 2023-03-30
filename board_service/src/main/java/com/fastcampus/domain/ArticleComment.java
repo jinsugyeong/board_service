@@ -1,24 +1,20 @@
 package com.fastcampus.domain;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,57 +23,47 @@ import lombok.ToString;
 @Getter
 @ToString
 @Table(indexes = {
-		@Index(columnList = "title"),
+		@Index(columnList = "content"),
 		@Index(columnList = "createdAt"),
 		@Index(columnList = "createdBy")
 })
 @Entity
-public class Article{
-	
+public class ArticleComment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Setter @Column(nullable = false) private String title;	//자동으로 설정되지 않는 부분만 setter
-	@Setter @Column(nullable = false, length= 10000) private String content;
+	@Setter @ManyToOne(optional = false) private Article article;
+	@Setter @Column(nullable = false, length = 500) private String tilte;
 	
-	@Setter private String hashtag;
-	
-	//JPA에 의해 사용되는 데이터
-	@ToString.Exclude	//순환참조 끊기
-	@OrderBy("id")
-	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL)	//양방향 바인딩(게시글 삭제 시 댓글도 삭제됨)
-	private final Set<ArticleComment> articleComment = new LinkedHashSet<>();
+	private String content;
+	private String hashtag;
 	
 	@CreatedDate @Column(nullable = false) private LocalDateTime createdAt;
 	@CreatedBy @Column(nullable = false, length= 100) private String createdBy;
 	@LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt;
 	@LastModifiedBy @Column(nullable = false, length= 100) private String modifiedBy;
 	
-	protected Article() {}
+	protected ArticleComment() {}
 	
-	//생성자
-	private Article(String title, String content, String hashtag) {
-		this.title = title;
+	private ArticleComment(Article article, String content) {
+		this.article = article;
 		this.content = content;
-		this.hashtag = hashtag;
 	}
 	
-	public static Article of(String title, String content, String hashtag) {
-		return new Article(title, content, hashtag);
+	public static ArticleComment of(Article article, String content) {
+		return new ArticleComment(article, content);
 	}
 	
-	//리스트 비교
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof Article article)) return false;	//패턴어쩌고
-		return id != null && id.equals(article.id);	//id가 null일때(insert 전) 조건 추가-> 새로만든 엔티티는 무조건 다른 값으로 취급
+		if (!(o instanceof ArticleComment that)) return false;	//패턴어쩌고
+		return id != null && id.equals(that.id);	//id가 null일때(insert 전) 조건 추가-> 새로만든 엔티티는 무조건 다른 값으로 취급
 	}
 	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-	
 }
