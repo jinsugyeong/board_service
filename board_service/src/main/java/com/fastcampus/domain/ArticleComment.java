@@ -34,9 +34,8 @@ public class ArticleComment {
 	private Long id;
 	
 	@Setter @ManyToOne(optional = false) private Article article;
-	@Setter @Column(nullable = false, length = 500) private String tilte;
 	
-	private String content;
+	private @Column(nullable = false, length = 500) String content;
 	private String hashtag;
 	
 	@CreatedDate @Column(nullable = false) private LocalDateTime createdAt;

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record ArticleDto(
-		String user_id,
 		String title,
 		String content,
 		String hashtag,
