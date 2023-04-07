@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.domain.type.SearchType;
 import com.fastcampus.dto.ArticleDto;
+import com.fastcampus.dto.ArticleUpdateDto;
 import com.fastcampus.repository.ArticleRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,17 @@ public class ArticleService {
 	@Transactional(readOnly = true)
 	public ArticleDto searchArticle(long l) {
 		return null;
+	}
+
+	public void saveArticle(ArticleDto dto) {
+		
+	}
+
+	public void updateArticle(long articleId, ArticleUpdateDto dto) {
+		
+	}
+
+	public void deleteArticle(long articleId) {
+		
 	}
 }
