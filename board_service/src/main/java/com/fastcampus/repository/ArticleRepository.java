@@ -1,5 +1,8 @@
 package com.fastcampus.repository;
 
+import java.awt.print.Pageable;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -17,6 +20,8 @@ public interface ArticleRepository extends
 		,QuerydslPredicateExecutor<Article>	//기본검색기능
 		,QuerydslBinderCustomizer<QArticle>
 {
+	Page<Article> findByTitle(String title, Pageable pageable);
+	
 	@Override
 	default void customize(QuerydslBindings bindings, QArticle root) {
 	//default 메서드로 인터페이스를 구현

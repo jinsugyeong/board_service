@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import com.fastcampus.config.JpaConfig;
 import com.fastcampus.domain.Article;
+import com.fastcampus.domain.UserAccount;
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) > application 설정에서 테스트db 전역설정 안했을 시 사용해야하는 어노테이션
-@ActiveProfiles("testdb")
+//@ActiveProfiles("testdb")
 @DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
 @DataJpaTest
@@ -23,20 +23,22 @@ class JpaRepositoryTest {
 	
 	private final ArticleRepository articleRepository;
 	private final ArticleCommentRepository articleCommentRepository;
-	
-	@Autowired
-	public JpaRepositoryTest(ArticleRepository articleRepository, 
-			ArticleCommentRepository articleCommentRepository
+	private final UserAccountRepository userAccountRepository;
+
+	public JpaRepositoryTest(
+			 @Autowired ArticleRepository articleRepository
+			, @Autowired ArticleCommentRepository articleCommentRepository
+			, @Autowired UserAccountRepository userAccountRepository
 	) {
 		this.articleRepository = articleRepository;
 		this.articleCommentRepository = articleCommentRepository;
+		this.userAccountRepository = userAccountRepository;
 	}
 	
 	@DisplayName("select테스트")
 	@Test
 	void givenTestData_whenSelecting_thenWorksFine() {
 		//Given
-		
 		
 		//When
 		List<Article> articles = articleRepository.findAll();
@@ -54,9 +56,11 @@ class JpaRepositoryTest {
 		//Given
 		//기존의 갯수를 insert 한 다음에 숫자 1개가 늘었다
 		long previousCount = articleRepository.count();
+		UserAccount userAccount = userAccountRepository.save(UserAccount.of("sg", "pw", null, null, null));
+		Article article = Article.of(userAccount, "new article", "new content", "#spring");
 		
 		//When
-		Article savedArticle = articleRepository.save(Article.of("new article", "new content", "#spring"));
+		articleRepository.save(article);
 		
 		//Then
 		assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
@@ -88,7 +92,7 @@ class JpaRepositoryTest {
 		Article article = articleRepository.findById(1L).orElseThrow();
 		long previousArticleCount = articleRepository.count();
 		long previousArticleCommentCount = articleCommentRepository.count();
-		int deletedCommentsSize = article.getArticleComment().size();
+		int deletedCommentsSize = article.getArticleComments().size();
 		
 		//When
 		articleRepository.delete(article);
