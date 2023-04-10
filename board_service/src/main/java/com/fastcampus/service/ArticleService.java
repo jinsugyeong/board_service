@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fastcampus.domain.Article;
 import com.fastcampus.domain.type.SearchType;
 import com.fastcampus.dto.ArticleDto;
 import com.fastcampus.dto.ArticleWithCommentsDto;
@@ -12,7 +13,9 @@ import com.fastcampus.repository.ArticleRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -50,9 +53,18 @@ public class ArticleService {
 	public void saveArticle(ArticleDto dto) {
 		articleRepository.save(dto.toEntity());
 	}
-
+	
+	//게시글 수정
 	public void updateArticle(ArticleDto dto) {
+		try{Article article = articleRepository.getReferenceById(dto.id());
 		
+			if(dto.title() != null) article.setTitle(dto.title());
+			if(dto.content() != null) article.setContent(dto.content());
+			article.setHashtag(dto.hashtag());
+		
+		} catch(EntityNotFoundException e) {
+			log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다. - dto: {}", dto);
+		}
 	}
 
 	public void deleteArticle(long articleId) {
