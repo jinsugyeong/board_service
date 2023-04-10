@@ -20,7 +20,20 @@ public class ArticleService {
 	
 	@Transactional(readOnly = true)
 	public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable){
-		return Page.empty();
+		//검색어 없이 게시글을 검색하면
+		if(searchKeyword == null || searchKeyword.isBlank()) {
+			return articleRepository.findAll(pageable).map(ArticleDto::from);
+		}
+		
+		//검색어 타입, 검색어 지정하여 게시글 검색
+		return switch (searchType) {
+			case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
+			case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
+			case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
+			case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
+			case HASHTAG -> articleRepository.findByHashtag("#"+searchKeyword, pageable).map(ArticleDto::from);
+		};
+		
 	}
 	
 	@Transactional(readOnly = true)

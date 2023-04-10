@@ -2,5 +2,5 @@ package com.fastcampus.domain.type;
 
 public enum SearchType {
 	
-	TITLE, CONTENT, ID, NICkNAME, HASHTAG
+	TITLE, CONTENT, ID, NICKNAME, HASHTAG
 }
