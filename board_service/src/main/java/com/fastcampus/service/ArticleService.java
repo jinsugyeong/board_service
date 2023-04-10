@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ArticleService {
 	private final ArticleRepository articleRepository;
 	
+	//게시글 리스트 조회
 	@Transactional(readOnly = true)
 	public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable){
 		//검색어 없이 게시글을 검색하면
@@ -37,16 +38,17 @@ public class ArticleService {
 		
 	}
 	
+	//게시글 단건 조회
 	@Transactional(readOnly = true)
 	public ArticleWithCommentsDto getArticle(Long articleId) {
-		//게시글 단건 조회
 		return articleRepository.findById(articleId)
 				.map(ArticleWithCommentsDto::from)
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
 	}
 
+	//게시글 저장
 	public void saveArticle(ArticleDto dto) {
-		
+		articleRepository.save(dto.toEntity());
 	}
 
 	public void updateArticle(ArticleDto dto) {
