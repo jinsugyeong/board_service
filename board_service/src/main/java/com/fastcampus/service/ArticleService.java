@@ -10,6 +10,7 @@ import com.fastcampus.dto.ArticleDto;
 import com.fastcampus.dto.ArticleWithCommentsDto;
 import com.fastcampus.repository.ArticleRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -38,7 +39,10 @@ public class ArticleService {
 	
 	@Transactional(readOnly = true)
 	public ArticleWithCommentsDto getArticle(Long articleId) {
-		return null;
+		//게시글 단건 조회
+		return articleRepository.findById(articleId)
+				.map(ArticleWithCommentsDto::from)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
 	}
 
 	public void saveArticle(ArticleDto dto) {
