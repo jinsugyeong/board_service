@@ -66,8 +66,9 @@ public class ArticleService {
 			log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다. - dto: {}", dto);
 		}
 	}
-
+	
+	//게시글 삭제
 	public void deleteArticle(long articleId) {
-		
+		articleRepository.deleteById(articleId);
 	}
 }
