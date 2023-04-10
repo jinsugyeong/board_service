@@ -20,7 +20,7 @@ public interface ArticleCommentRepository extends
 		,QuerydslBinderCustomizer<QArticleComment>
 {
 	
-	List<ArticleComment> findByArticle_Id(Long articleId);
+	List<ArticleComment> findByArticle_Id(Long articleId);	//_는 아티클의 id를 뜻함
 	
 	@Override
 	default void customize(QuerydslBindings bindings, QArticleComment root) {

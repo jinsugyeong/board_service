@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.fastcampus.domain.UserAccount;
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) > application 설정에서 테스트db 전역설정 안했을 시 사용해야하는 어노테이션
 //@ActiveProfiles("testdb")
+
 @DisplayName("JPA 연결 테스트")
 @Import(JpaConfig.class)
 @DataJpaTest
@@ -26,9 +28,9 @@ class JpaRepositoryTest {
 	private final UserAccountRepository userAccountRepository;
 
 	public JpaRepositoryTest(
-			 @Autowired ArticleRepository articleRepository
-			, @Autowired ArticleCommentRepository articleCommentRepository
-			, @Autowired UserAccountRepository userAccountRepository
+			@Autowired ArticleRepository articleRepository,
+			@Autowired ArticleCommentRepository articleCommentRepository,
+			@Autowired UserAccountRepository userAccountRepository
 	) {
 		this.articleRepository = articleRepository;
 		this.articleCommentRepository = articleCommentRepository;
