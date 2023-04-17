@@ -28,7 +28,6 @@ import com.fastcampus.repository.ArticleRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
-@Disabled
 @DisplayName("비즈니스 로직 - 댓글")
 @ExtendWith(MockitoExtension.class)
 class ArticleCommentServiceTest {
