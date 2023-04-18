@@ -1,5 +1,7 @@
 package com.fastcampus.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -72,10 +74,25 @@ public class ArticleService {
 		articleRepository.deleteById(articleId);
 	}
 	
+	// 게시글 갯수 카운트
 	public long getArticleCount() {
 		 return articleRepository.count();
 	}
 
 	
+	//해시태그 사용하여 게시글 검색
+	@Transactional(readOnly = true)
+	public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
+		if(hashtag == null || hashtag.isBlank()) {
+			//해시태그가 없다면 빈페이지
+			return Page.empty(pageable);
+		}
+		
+		return articleRepository.findByHashtag(hashtag, pageable).map(ArticleDto::from);
+	}
 	
+	//해시태그 리스트 조회
+	public List<String> getHashtags() {
+		return articleRepository.findAllDistinctHashtags();
+	}
 }

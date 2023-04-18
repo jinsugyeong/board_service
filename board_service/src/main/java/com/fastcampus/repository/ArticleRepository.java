@@ -10,12 +10,14 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.fastcampus.domain.Article;
 import com.fastcampus.domain.QArticle;
+import com.fastcampus.repository.querydsl.ArticleRepositoryCustom;
 import com.querydsl.core.types.dsl.DateTimeExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 
 @RepositoryRestResource
 public interface ArticleRepository extends 
 		JpaRepository<Article,Long>
+		,ArticleRepositoryCustom
 		,QuerydslPredicateExecutor<Article>	//기본검색기능
 		,QuerydslBinderCustomizer<QArticle>
 {
