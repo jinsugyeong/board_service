@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class ArticleComment extends AuditingFields{
 	private Long id;
 	
 	@Setter @ManyToOne(optional = false) private Article article;
-	@Setter @ManyToOne(optional = false) private UserAccount userAccount;
+	@Setter @ManyToOne(optional = false) @JoinColumn(name="userId") private UserAccount userAccount;
 	
 	@Setter @Column(nullable = false, length = 500) private String content;
 	
