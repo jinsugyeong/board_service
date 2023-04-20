@@ -125,7 +125,7 @@ class ArticleControllerTest {
 		//Given
 		Long articleId = 1L;
 		long totalCount = 1L;
-		given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
+		given(articleService.getArticleWithcommets(articleId)).willReturn(createArticleWithCommentsDto());
 		given(articleService.getArticleCount()).willReturn(totalCount);
 		
 		//When & Then

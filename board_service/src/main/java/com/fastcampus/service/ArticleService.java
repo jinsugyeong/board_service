@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fastcampus.domain.Article;
+import com.fastcampus.domain.UserAccount;
 import com.fastcampus.domain.type.SearchType;
 import com.fastcampus.dto.ArticleDto;
 import com.fastcampus.dto.ArticleWithCommentsDto;
 import com.fastcampus.repository.ArticleRepository;
+import com.fastcampus.repository.UserAccountRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class ArticleService {
 	private final ArticleRepository articleRepository;
+	private final UserAccountRepository userAccountRepository;
 	
 	//게시글 리스트 조회
 	@Transactional(readOnly = true)
@@ -43,22 +46,32 @@ public class ArticleService {
 		
 	}
 	
-	//게시글 단건 조회
+	//게시글 단건 조회(댓글 O)
 	@Transactional(readOnly = true)
-	public ArticleWithCommentsDto getArticle(Long articleId) {
+	public ArticleWithCommentsDto getArticleWithcommets(Long articleId) {
 		return articleRepository.findById(articleId)
 				.map(ArticleWithCommentsDto::from)
 				.orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
 	}
+	
+	//게시글 단건 조회(댓글 X)
+	@Transactional(readOnly = true)
+	public ArticleDto getArticle(Long articleId) {
+		return articleRepository.findById(articleId)
+				.map(ArticleDto::from)
+				.orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleI: " + articleId));
+	}
 
 	//게시글 저장
 	public void saveArticle(ArticleDto dto) {
-		articleRepository.save(dto.toEntity());
+		UserAccount userAccout = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+		articleRepository.save(dto.toEntity(userAccout));
 	}
 	
 	//게시글 수정
-	public void updateArticle(ArticleDto dto) {
-		try{Article article = articleRepository.getReferenceById(dto.id());
+	public void updateArticle(Long articleId, ArticleDto dto) {
+		try{
+			Article article = articleRepository.getReferenceById(articleId);
 		
 			if(dto.title() != null) article.setTitle(dto.title());
 			if(dto.content() != null) article.setContent(dto.content());
