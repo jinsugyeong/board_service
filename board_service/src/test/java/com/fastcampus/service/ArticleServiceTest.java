@@ -23,7 +23,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.fastcampus.domain.Article;
 import com.fastcampus.domain.UserAccount;
-import com.fastcampus.domain.type.SearchType;
+import com.fastcampus.domain.constant.SearchType;
 import com.fastcampus.dto.ArticleDto;
 import com.fastcampus.dto.ArticleWithCommentsDto;
 import com.fastcampus.dto.UserAccountDto;

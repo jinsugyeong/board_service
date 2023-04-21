@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fastcampus.domain.type.SearchType;
+import com.fastcampus.domain.constant.SearchType;
 import com.fastcampus.dto.response.ArticleResponse;
 import com.fastcampus.dto.response.ArticleWithCommentResponse;
 import com.fastcampus.service.ArticleService;
