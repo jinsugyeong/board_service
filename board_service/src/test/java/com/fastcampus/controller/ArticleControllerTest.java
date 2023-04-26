@@ -309,41 +309,41 @@ class ArticleControllerTest {
 	
 	
 	
-	 private ArticleDto createArticleDto() {
-	        return ArticleDto.of(
-	                createUserAccountDto(),
-	                "title",
-	                "content",
-	                "#java"
-	        );
-	    }
-	
-	 private ArticleWithCommentsDto createArticleWithCommentsDto() {
-	        return ArticleWithCommentsDto.of(
-	                1L,
-	                createUserAccountDto(),
-	                Set.of(),
-	                "title",
-	                "content",
-	                "#java",
-	                LocalDateTime.now(),
-	                "gang",
-	                LocalDateTime.now(),
-	                "gang"
-	        );
-	    }
+	private ArticleDto createArticleDto() {
+        return ArticleDto.of(
+                createUserAccountDto(),
+                "title",
+                "content",
+                "#java"
+        );
+    }
 
-	    private UserAccountDto createUserAccountDto() {
-	        return UserAccountDto.of(
-	                "sugyeong",
-	                "pw",
-	                "jsg@mail.com",
-	                "gang",
-	                "memo",
-	                LocalDateTime.now(),
-	                "gang",
-	                LocalDateTime.now(),
-	                "gang"
-	        );
-	    }
+    private ArticleWithCommentsDto createArticleWithCommentsDto() {
+        return ArticleWithCommentsDto.of(
+                1L,
+                createUserAccountDto(),
+                Set.of(),
+                "title",
+                "content",
+                "#java",
+                LocalDateTime.now(),
+                "uno",
+                LocalDateTime.now(),
+                "uno"
+        );
+    }
+
+    private UserAccountDto createUserAccountDto() {
+        return UserAccountDto.of(
+                "uno",
+                "pw",
+                "uno@mail.com",
+                "Uno",
+                "memo",
+                LocalDateTime.now(),
+                "uno",
+                LocalDateTime.now(),
+                "uno"
+        );
+    }
 }

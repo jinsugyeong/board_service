@@ -276,56 +276,54 @@ class ArticleServiceTest {
 	
 	private UserAccount createUserAccount() {
         return UserAccount.of(
-                "sugyeong",
+                "uno",
                 "password",
-                "jsg@email.com",
-                "gang",
+                "uno@email.com",
+                "Uno",
                 null
         );
     }
-	
-	private Article createArticle() {
-		
-		 Article article = Article.of(
+
+    private Article createArticle() {
+        Article article = Article.of(
                 createUserAccount(),
                 "title",
                 "content",
                 "#java"
         );
-		 
-		ReflectionTestUtils.setField(article, "id", 1L);
-		
-		return article;
-	}
-	
-	private ArticleDto createArticleDto() {
+        ReflectionTestUtils.setField(article, "id", 1L);
+
+        return article;
+    }
+
+    private ArticleDto createArticleDto() {
         return createArticleDto("title", "content", "#java");
     }
 
     private ArticleDto createArticleDto(String title, String content, String hashtag) {
         return ArticleDto.of(
-        		1L,
+                1L,
                 createUserAccountDto(),
                 title,
                 content,
                 hashtag,
                 LocalDateTime.now(),
-                "gang",
+                "Uno",
                 LocalDateTime.now(),
-                "gang");
+                "Uno");
     }
 
     private UserAccountDto createUserAccountDto() {
         return UserAccountDto.of(
-                "sugyeong",
+                "uno",
                 "password",
-                "jsg@mail.com",
-                "gang",
+                "uno@mail.com",
+                "Uno",
                 "This is memo",
                 LocalDateTime.now(),
-                "gang",
+                "uno",
                 LocalDateTime.now(),
-                "gang"
+                "uno"
         );
     }
 }

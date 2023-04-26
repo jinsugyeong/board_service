@@ -19,7 +19,7 @@ import com.fastcampus.domain.constant.SearchType;
 import com.fastcampus.dto.UserAccountDto;
 import com.fastcampus.dto.request.ArticleRequest;
 import com.fastcampus.dto.response.ArticleResponse;
-import com.fastcampus.dto.response.ArticleWithCommentResponse;
+import com.fastcampus.dto.response.ArticleWithCommentsResponse;
 import com.fastcampus.service.ArticleService;
 import com.fastcampus.service.PaginationService;
 
@@ -35,33 +35,34 @@ public class ArticleController {
 	
 	//게시글 리스트 조회
 	@GetMapping
-	public String articles(
-			@RequestParam(required = false) SearchType searchType,
-			@RequestParam(required = false) String searchValue,
-			@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-			ModelMap map
-	) {
-		Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
-		List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
-		
-		map.addAttribute("articles", articles);
-		map.addAttribute("paginationBarNumbers", barNumbers);
-		map.addAttribute("searchTypes", SearchType.values());
-		
-		return "articles/index";
-	}
+	 public String articles(
+	            @RequestParam(required = false) SearchType searchType,
+	            @RequestParam(required = false) String searchValue,
+	            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+	            ModelMap map
+	    ) {
+	        Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
+	        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+
+	        map.addAttribute("articles", articles);
+	        map.addAttribute("paginationBarNumbers", barNumbers);
+	        map.addAttribute("searchTypes", SearchType.values());
+
+	        return "articles/index";
+	 }
 	
 	//게시글 단건(상세) 조회
 	@GetMapping("/{articleId}")
 	public String article(@PathVariable Long articleId, ModelMap map) {
-		ArticleWithCommentResponse article = ArticleWithCommentResponse.from(articleService.getArticleWithcommets(articleId));
-		
-		map.addAttribute("article", article);
-		map.addAttribute("articleComments", article.articleCommentResponse());
-		map.addAttribute("totalCount", articleService.getArticleCount());
-		
-		return "articles/detail";
-	}
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithcommets(articleId));
+
+        map.addAttribute("article", article);
+        map.addAttribute("articleComments", article.articleCommentsResponse());
+        map.addAttribute("totalCount", articleService.getArticleCount());
+
+        return "articles/detail";
+    }
+
 	
 	
 	//해시태그 검색
