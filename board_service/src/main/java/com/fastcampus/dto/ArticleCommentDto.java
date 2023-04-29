@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fastcampus.domain.Article;
 import com.fastcampus.domain.ArticleComment;
+import com.fastcampus.domain.UserAccount;
 
 public record ArticleCommentDto(
 		Long id,
@@ -36,10 +37,10 @@ public record ArticleCommentDto(
         );
     }
 
-    public ArticleComment toEntity(Article entity) {
+    public ArticleComment toEntity(Article article, UserAccount userAccount) {
         return ArticleComment.of(
-                entity,
-                userAccountDto.toEntity(),
+                article,
+                userAccount,
                 content
         );
     }
