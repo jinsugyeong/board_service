@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fastcampus.domain.constant.FormStatus;
 import com.fastcampus.domain.constant.SearchType;
-import com.fastcampus.dto.UserAccountDto;
 import com.fastcampus.dto.request.ArticleRequest;
 import com.fastcampus.dto.response.ArticleResponse;
 import com.fastcampus.dto.response.ArticleWithCommentsResponse;
+import com.fastcampus.dto.security.BoardPrincipal;
 import com.fastcampus.service.ArticleService;
 import com.fastcampus.service.PaginationService;
 
@@ -54,7 +55,7 @@ public class ArticleController {
 	//게시글 단건(상세) 조회
 	@GetMapping("/{articleId}")
 	public String article(@PathVariable Long articleId, ModelMap map) {
-        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithcommets(articleId));
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithComments(articleId));
 
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
@@ -97,11 +98,12 @@ public class ArticleController {
 	
 	//게시글 작성
 	@PostMapping("/form")
-	public String postNewArticle(ArticleRequest articleRequest) {
+	public String postNewArticle(
+			@AuthenticationPrincipal BoardPrincipal boardPrincipal
+			, ArticleRequest articleRequest
+	) {
 		
-		articleService.saveArticle(articleRequest.toDto(UserAccountDto.of(
-				 "uno", "asdf1234", "uno@mail.com", "Uno", "memo"
-		)));
+		articleService.saveArticle(articleRequest.toDto(boardPrincipal.toDto()));
 		
 		return "redirect:/articles";
 	}
@@ -122,10 +124,12 @@ public class ArticleController {
 	
 	//게시글 수정
 	@PostMapping("/{articleId}/form")
-	public String updateArticle(@PathVariable Long articleId, ArticleRequest articleRequest) {
-		articleService.updateArticle(articleId, articleRequest.toDto(UserAccountDto.of(
-				"uno", "asdf1234", "uno@mail.com", "Uno", "memo"
-		)));
+	public String updateArticle(
+			@PathVariable Long articleId
+			, @AuthenticationPrincipal BoardPrincipal boardPrincipal
+			, ArticleRequest articleRequest
+	) {
+		articleService.updateArticle(articleId, articleRequest.toDto(boardPrincipal.toDto()));
 		
 		return "redirect:/articles/" + articleId;
 	}
@@ -133,8 +137,11 @@ public class ArticleController {
 	
 	//게시글 삭제
 	@PostMapping("{articleId}/delete")
-	public String deleteArticle(@PathVariable Long articleId) {
-		articleService.deleteArticle(articleId);	//인증 정보 넣어줘야 함		
+	public String deleteArticle(
+			@PathVariable Long articleId
+			,@AuthenticationPrincipal BoardPrincipal boardPrincipal
+	) {
+		articleService.deleteArticle(articleId, boardPrincipal.getUsername());
 		
 		return "redirect:/articles";
 	}

@@ -7,6 +7,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.fastcampus.dto.UserAccountDto;
@@ -43,6 +45,11 @@ public class SecurityConfig {
                 .map(UserAccountDto::from)
                 .map(BoardPrincipal::from)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다 - username: " + username));
+    }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+    	return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 

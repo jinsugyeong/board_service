@@ -27,6 +27,8 @@ public interface ArticleRepository extends
 	Page<Article> findByUserAccount_NicknameContaining(String title, Pageable pageable);
 	Page<Article> findByHashtag(String hashtag, Pageable pageable);
 	
+	void deleteByIdAndUserAccount_UserId(Long articleId, String userId);
+	
 	@Override
 	default void customize(QuerydslBindings bindings, QArticle root) {
 	//default 메서드로 인터페이스를 구현

@@ -62,8 +62,8 @@ public class ArticleCommentService {
     }
 	
 	//댓글 삭제
-    public void deleteArticleComment(Long articleCommentId) {
+    public void deleteArticleComment(Long articleCommentId, String userId) {
     	
-    	articleCommentRepository.deleteById(articleCommentId);
+    	articleCommentRepository.deleteByIdAndUserAccount_UserId(articleCommentId, userId);
     }
 }

@@ -21,6 +21,7 @@ public interface ArticleCommentRepository extends
 {
 	
 	List<ArticleComment> findByArticle_Id(Long articleId);	//_는 아티클의 id를 뜻함
+	void deleteByIdAndUserAccount_UserId(Long articleCommentId, String userId);
 	
 	@Override
 	default void customize(QuerydslBindings bindings, QArticleComment root) {
