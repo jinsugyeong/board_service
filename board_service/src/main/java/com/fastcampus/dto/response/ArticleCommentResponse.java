@@ -6,15 +6,16 @@ import java.time.LocalDateTime;
 import com.fastcampus.dto.ArticleCommentDto;
 
 public record ArticleCommentResponse(
-        Long id,
-        String content,
-        LocalDateTime createdAt,
-        String email,
-        String nickname
+        Long id
+        , String content
+        , LocalDateTime createdAt
+        , String email
+        , String nickname
+        , String userId
 ) implements Serializable {
 
-    public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname) {
-        return new ArticleCommentResponse(id, content, createdAt, email, nickname);
+    public static ArticleCommentResponse of(Long id, String content, LocalDateTime createdAt, String email, String nickname, String userId) {
+        return new ArticleCommentResponse(id, content, createdAt, email, nickname, userId);
     }
 
     public static ArticleCommentResponse from(ArticleCommentDto dto) {
@@ -24,11 +25,12 @@ public record ArticleCommentResponse(
         }
 
         return new ArticleCommentResponse(
-                dto.id(),
-                dto.content(),
-                dto.createdAt(),
-                dto.userAccountDto().email(),
-                nickname
+                dto.id()
+                , dto.content()
+                , dto.createdAt()
+                , dto.userAccountDto().email()
+                , nickname
+                , dto.userAccountDto().userId()
         );
     }
 
