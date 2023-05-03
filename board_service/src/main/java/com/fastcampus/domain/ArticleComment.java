@@ -49,11 +49,11 @@ public class ArticleComment extends AuditingFields{
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof ArticleComment that)) return false;	//패턴어쩌고
-		return id != null && id.equals(that.id);	//id가 null일때(insert 전) 조건 추가-> 새로만든 엔티티는 무조건 다른 값으로 취급
+		return this.getId() != null && this.getId().equals(that.getId());	//id가 null일때(insert 전) 조건 추가-> 새로만든 엔티티는 무조건 다른 값으로 취급
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(this.getId());
 	}
 }
