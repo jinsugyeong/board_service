@@ -6,13 +6,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fastcampus.dto.ArticleWithCommentsDto;
-import com.fastcampus.dto.HashtagDto;
 
 public record ArticleWithCommentsResponse(
         Long id
         , String title
         , String content
-        , Set<String> hashtags
+        , String hashtag
         , LocalDateTime createdAt
         , String email
         , String nickname
@@ -20,8 +19,8 @@ public record ArticleWithCommentsResponse(
         , Set<ArticleCommentResponse> articleCommentsResponse
 ) {
 
-    public static ArticleWithCommentsResponse of(Long id, String title, String content, Set<String> hashtags, LocalDateTime createdAt, String email, String nickname, String userId, Set<ArticleCommentResponse> articleCommentResponses) {
-        return new ArticleWithCommentsResponse(id, title, content, hashtags, createdAt, email, nickname, userId, articleCommentResponses);
+    public static ArticleWithCommentsResponse of(Long id, String title, String content, String hashtag, LocalDateTime createdAt, String email, String nickname, String userId, Set<ArticleCommentResponse> articleCommentResponses) {
+        return new ArticleWithCommentsResponse(id, title, content, hashtag, createdAt, email, nickname, userId, articleCommentResponses);
     }
 
     public static ArticleWithCommentsResponse from(ArticleWithCommentsDto dto) {
@@ -34,9 +33,7 @@ public record ArticleWithCommentsResponse(
                 dto.id()
                 , dto.title()
                 , dto.content()
-                , dto.hashtagDtos().stream()
-                	.map(HashtagDto::hashtagName)
-                	.collect(Collectors.toUnmodifiableSet())
+                , dto.hashtag()
                 , dto.createdAt()
                 , dto.userAccountDto().email()
                 , nickname
