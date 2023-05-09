@@ -1,10 +1,24 @@
 package com.fastcampus.domain;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +27,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Table(indexes = {
 		@Index(columnList = "title"),
-		@Index(columnList = "hashtag"),
 		@Index(columnList = "createdAt"),
 		@Index(columnList = "createdBy")
 })
@@ -25,14 +38,21 @@ public class Article extends AuditingFields{
 	private Long id;
 	
 	@Setter 
-	@ManyToOne(optional = false) 
 	@JoinColumn(name = "userId") 
+	@ManyToOne(optional = false) 
 	private UserAccount userAccount;	//유저 정보(ID)
 	
 	@Setter @Column(nullable = false) private String title;	//자동으로 설정되지 않는 부분만 setter
 	@Setter @Column(nullable = false, length= 10000) private String content;
 	
-	@Setter private String hashtag;
+	@ToString.Exclude
+	@JoinTable(
+			name = "article_hashtag"
+			, joinColumns = @JoinColumn(name = "articleId")
+			, inverseJoinColumns = @JoinColumn(name = "hashtagId")
+	)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<Hashtag> hashtags = new LinkedHashSet<>();
 	
 	//JPA에 의해 사용되는 데이터
 	@ToString.Exclude	//순환참조 끊기
@@ -43,15 +63,26 @@ public class Article extends AuditingFields{
 	protected Article() {}
 	
 	//생성자
-	private Article(UserAccount userAccount, String title, String content, String hashtag) {
+	private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
     }
 
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {
+        return new Article(userAccount, title, content);
+    }
+    
+    public void addHashtag(Hashtag hashtag) {
+    	this.getHashtags().add(hashtag);
+    }
+    
+    public void addHashtags(Collection<Hashtag> hashtags) {
+    	this.getHashtags().addAll(hashtags);
+    }
+    
+    public void clearHashtags() {
+    	this.getHashtags().clear();
     }
 	
 	//리스트 비교
