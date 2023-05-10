@@ -33,8 +33,8 @@ public record ArticleWithCommentsDto(
                 entity.getTitle(),
                 entity.getContent(),
                 entity.getHashtags().stream()
-                .map(HashtagDto::from)
-                .collect(Collectors.toUnmodifiableSet()),
+		                .map(HashtagDto::from)
+		                .collect(Collectors.toUnmodifiableSet()),
                 entity.getCreatedAt(),
                 entity.getCreatedBy(),
                 entity.getModifiedAt(),

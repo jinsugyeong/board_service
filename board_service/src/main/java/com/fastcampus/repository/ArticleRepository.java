@@ -25,7 +25,6 @@ public interface ArticleRepository extends
 	Page<Article> findByContentContaining(String content, Pageable pageable);
 	Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
 	Page<Article> findByUserAccount_NicknameContaining(String title, Pageable pageable);
-	Page<Article> findByHashtag(String hashtag, Pageable pageable);
 	
 	void deleteByIdAndUserAccount_UserId(Long articleId, String userId);
 	
@@ -34,13 +33,13 @@ public interface ArticleRepository extends
 	//default 메서드로 인터페이스를 구현
 		
 		bindings.excludeUnlistedProperties(true);	//선택적인 필드만 검색하고싶음
-		bindings.including(root.title, root.content,root.hashtag, root.createdAt, root.createdBy);	//제목,	본문, 해시태그, 생성일시, 글쓴이
+		bindings.including(root.title, root.content, root.hashtags, root.createdAt, root.createdBy);	//제목,	본문, 해시태그, 생성일시, 글쓴이
 		
 		//(path, value) -> path.eq(value)  > SimpeExpression::eq >
 		//bindings.bind(root.title).first(StringExpression::likeIgnoreCase);	//like '${value}'	와일드카드x 부분검사불가
 		bindings.bind(root.title).first(StringExpression::containsIgnoreCase);	//like '%${value}%'
 		bindings.bind(root.content).first(StringExpression::containsIgnoreCase);	//like '%${value}%'
-		bindings.bind(root.hashtag).first(StringExpression::containsIgnoreCase);	//like '%${value}%'
+		bindings.bind(root.hashtags.any().hashtagName).first(StringExpression::containsIgnoreCase);	//like '%${value}%'
 		bindings.bind(root.createdAt).first(DateTimeExpression::eq);	//like '%${value}%'
 		bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);	//like '%${value}%'
 	}
